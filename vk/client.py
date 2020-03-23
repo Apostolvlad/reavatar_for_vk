@@ -9,7 +9,9 @@ class Client:
 
     def _get(self, url, params): return self._session.get(url, params = params, timeout = self._timeout)
 
-    def _post(self, url, data = {}, files = {}): return self._session.get(url, data = data, files = files, timeout = self._timeout)
+    def _post(self, url, data = {}, files = {}): 
+        if len(data): return self._session.post(url, data = data, timeout = self._timeout)
+        return self._session.post(url, files = files, timeout = self._timeout)
     
     def get(self, url, params = {}, json_mode = True):
         response = self._get(url, params)
@@ -17,7 +19,7 @@ class Client:
         return response.text
 
     def post(self, url, data = {}, files = {}, json_mode = True):
-        response = self._post(url, params, files)
+        response = self._post(url, data = data, files = files)
         if json_mode: return response.json()
         return response.text
 
